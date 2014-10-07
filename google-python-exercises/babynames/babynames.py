@@ -6,8 +6,7 @@
 # Google's Python Class
 # http://code.google.com/edu/languages/google-python-class/
 
-import sys
-import re
+
 
 """Baby Names exercise
 
@@ -33,6 +32,9 @@ Suggested milestones for incremental development:
  -Build the [year, 'name rank', ... ] list and print it
  -Fix main() to use the extract_names list
 """
+import sys
+import re
+
 
 def extract_names(filename):
   """
@@ -40,8 +42,23 @@ def extract_names(filename):
   followed by the name-rank strings in alphabetical order.
   ['2006', 'Aaliyah 91', Aaron 57', 'Abagail 895', ' ...]
   """
-  # +++your code here+++
-  return
+  f=open(filename)
+  data = f.read()
+  f.close()
+  match=re.search(r'(Popularity in\s)+(\d+)',data)
+  year=match.group(2)
+
+  tuples=match=re.findall(r'(?:<td>)(\d+)(?:</td><td>)([A-Z][a-z]+)(?:</td><td>)([A-Z][a-z]+)',data)
+  dictm={x[0]:x[1] for x in tuples}
+  dictf={x[0]:x[2] for x in tuples}
+  dict = dictm.items()+dictf.items()
+  tuples = [(y[1],y[0]) for y in dict]
+  tuples.sort()
+  list1 = [year]
+  for x in tuples:
+    list1.append(x[0]+" "+x[1])
+
+  return list1
 
 
 def main():
@@ -60,9 +77,18 @@ def main():
     summary = True
     del args[0]
 
-  # +++your code here+++
-  # For each filename, get the names, then either print the text output
-  # or write it to a summary file
-  
+  #your code here
+  for filename in args:
+    names = extract_names(filename)
+    text = '\n'.join(names)
+    if not summary:
+      print text
+    if summary:
+      match=re.search(r"([a-z]+[0-9]+)(?:[\.html])",filename)
+      out1 = match.group(1) + "_summary.txt"
+      out_f = open(out1,'w')
+      out_f.write(text+'\n')
+      out_f.close()
+
 if __name__ == '__main__':
   main()

@@ -1,10 +1,11 @@
 #Practice exercises
+i=1
+f= open('alice.txt','rU')
+for line in f:
+   print line
+   i+=1
+   if i == 25:
+      break
+    
+    
 
-hash = {}
-hash['word'] = 'garfield'
-hash['count'] = 42
-hash['word'] = 'charlie brown'
-hash['count'] = 50
-print hash
-s = 'I want %(count)d copies of %(word)s' % hash
-print s
