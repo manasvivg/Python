@@ -18,7 +18,26 @@ import commands
 # +++your code here+++
 # Write functions and modify main() to call them
 
+#match=re.search(r'.*[_][a-z|0-9]+[_].*',"place_code.google.com")
 
+def get_special_paths(dir):
+  filenames = os.listdir(dir)
+  path = os.path.abspath(dir)
+
+  print 'ALL:',filenames
+  #find special files
+  special = []
+  for file in filenames:
+    match=re.search(r'.*[_][a-z|0-9]+[_].*',file)
+    if match:
+      special += [os.path.join(path,file)]
+  print "SPECIAL:",special
+
+  return
+
+get_special_paths(os.getcwd())
+
+sys.exit(0)
 
 def main():
   # This basic command line argument parsing code is provided.
@@ -50,6 +69,6 @@ def main():
 
   # +++your code here+++
   # Call your functions
-  
+
 if __name__ == "__main__":
   main()
