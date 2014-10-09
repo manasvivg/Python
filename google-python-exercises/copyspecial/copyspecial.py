@@ -14,7 +14,6 @@ import commands
 
 """Copy Special exercise
 """
-#assume you get full paths
 
 # +++your code here+++
 # Write functions and modify main() to call them
@@ -25,12 +24,14 @@ def get_special_paths(dir):
 
   #find special files
   special = []
-  for file in dir:
-    match=re.search(r'.*[_][a-z|0-9]+[_].*',file)
-    if match:
-      special += [os.path.join(path,file)]
-  return special
+  for dir1 in dir:
+    filenames = os.listdir(dir1)
+    for file in filenames:
+      match=re.search(r'.*[_][a-z|0-9]+[_].*',file)
+      if match:
+        special += [os.path.join(dir1, file)]
 
+  return special
 
 
 def copy_to(paths,dir):
@@ -43,15 +44,15 @@ def copy_to(paths,dir):
 
 def zip_to(paths, zippath):
   for files in paths:
-    cmd = 'zip ' + zippath +' ' + files
-    print cmd
+    cmd = 'zip -j ' + zippath +' ' + files
+    print "trying:", cmd
     (status, output) = commands.getstatusoutput(cmd)
-    print status, output
+    print "status=",status, "output=", output
     if status:    ## Error case, print the command's output to stderr and exit
       sys.stderr.write(output)
       sys.exit(1)
-    print output
   return
+
 
 def main():
   # This basic command line argument parsing code is provided.
@@ -67,7 +68,6 @@ def main():
   # todir and tozip are either set from command line
   # or left as the empty string.
   # The args array is left just containing the dirs.
-  print args
   todir = ''
   if args[0] == '--todir':
     todir = args[1]
@@ -84,11 +84,11 @@ def main():
 
   # +++your code here+++
   # Call your functions
+  paths=get_special_paths(args)
   if todir:
-    get_special_paths(args)
-    copy_to(args,todir)
+    copy_to(paths,todir)
   if tozip:
-    get_special_paths(args)
-    zip_to(args,tozip)
+    zip_to(paths,tozip)
+
 if __name__ == "__main__":
   main()
